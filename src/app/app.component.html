@@ -1,0 +1,14 @@
+<!--navbar with logo bootstrap -->
+<nav class="navbar navbar-light bg-light">
+  <a class="navbar-brand" href="#">
+    <img src="http://www.berexia.com/wp-content/uploads/2017/11/logo-berexia-cabinet-conseil.png" width="120" height="60" alt="">
+  </a>
+</nav>
+
+<div class="container">
+  <button (click)="List()" class="btn btn-info">List of employee</button>
+<!--  <i class="fas fa-user-plus"></i>-->
+  <button (click)="AddEmployee()" class="btn btn-info " style="margin-left: 10px"><i class="fas fa-user-plus"></i>Add Employee</button>
+</div>
+
+<router-outlet></router-outlet>
