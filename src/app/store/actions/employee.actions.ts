@@ -4,6 +4,9 @@ import {EmployeesState} from "../reducers/employee.reducers";
 import {Update} from "@ngrx/entity";
 //definir ensample des constants
 export enum EmployeeActionType {
+  GET_EMPLOYEES = '[employee] get employees from server',
+  SAVE_EMPLOYEES = '[employee] save employees to the store',
+
   LOAD_EMPLOYEES = '[employee] get items',
   LOAD_EMPLOYEES_FAIL = '[employee] get items fail',
   LOAD_EMPLOYEES_SUCESS = '[employee] get items success',
@@ -26,6 +29,18 @@ export enum EmployeeActionType {
 }
 
 //action object that implements the Action interface provided by NgRx
+export class GetEmployeesAction implements Action {
+  readonly type = EmployeeActionType.GET_EMPLOYEES;
+
+  constructor(public payload: {req: string}) {
+  }
+}
+export class SaveEmployeesAction implements Action {
+  readonly type = EmployeeActionType.SAVE_EMPLOYEES;
+
+  constructor(public payload: {employees: Employee[]}) {
+  }
+}
 export class LoadEmployee implements Action {
   readonly type = EmployeeActionType.LOAD_EMPLOYEES;
 
@@ -103,7 +118,23 @@ export class UpdateEmployeeSucess implements Action {
   constructor(public payload: Update<Employee>) {
   }
 }
+export class SearchEmployee implements Action {
+  readonly type = EmployeeActionType.SEARCH_EMPLOYEES;
+  constructor(public payload: any) {}
+}
+
+export class SearchEmployeeSuccess implements Action {
+  readonly type = EmployeeActionType.SEARCH_EMPLOYEES_SUCESS;
+  constructor(public payload: Employee[]) {}
+}
+
+export class SearchEmployeeFail implements Action {
+  readonly type = EmployeeActionType.SEARCH_EMPLOYEES_FAIL;
+  constructor(public payload: any) {}
+}
 export type Action =
+  GetEmployeesAction |
+  SaveEmployeesAction |
   LoadEmployee |
   LoadEmployeeSucess |
   LoadEmployeeFail |
@@ -115,7 +146,11 @@ export type Action =
   deleteEmployeeFail|
   UpdateEmployee|
   UpdateEmployeeFail|
-  UpdateEmployeeSucess
+  UpdateEmployeeSucess|
+  SearchEmployee|
+  SearchEmployeeSuccess|
+  SearchEmployeeFail
+
   ;
 
 

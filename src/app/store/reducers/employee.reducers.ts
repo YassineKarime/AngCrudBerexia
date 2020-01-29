@@ -17,6 +17,15 @@ const initialState: EmployeesState = {
 
 export function reducer(state = initialState, action: fromEmployee.Action) {
   switch (action.type) {
+
+    case fromEmployee.EmployeeActionType.SAVE_EMPLOYEES: {
+      return {
+        ...state,
+        AllEmployees: action.payload.employees,
+        loaded: !!(action.payload.employees && action.payload.employees.length>0)
+      };
+    }
+
     case fromEmployee.EmployeeActionType.LOAD_EMPLOYEES: {
       return _.merge({}, state, {loading: true});
     }
@@ -71,5 +80,17 @@ export function reducer(state = initialState, action: fromEmployee.Action) {
         error: action.payload
       };
     }
+    case fromEmployee.EmployeeActionType.SEARCH_EMPLOYEES_SUCESS:
+      return {
+        ...state,
+        AllEmployees: action.payload,
+        loading: false
+      };
+
+    case fromEmployee.EmployeeActionType.SEARCH_EMPLOYEES_FAIL:
+      return {
+        ...state,
+        searchEmployee: null
+      };
   }
 }

@@ -7,6 +7,7 @@ import {Actions} from "@ngrx/effects";
 import * as fromState from "src/app/store";
 import {SelectEmployeesState} from "src/app/store";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+
 @Component({
   selector: 'app-employee-list',
   templateUrl: './employee-list.component.html',
@@ -14,10 +15,12 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 })
 export class EmployeeListComponent implements OnInit {
   employees: Employee[];
-  searchemp: any;
+  searchemp: string;
+  _timeOutID: any;
   display: boolean = false;
   formule: FormGroup;
-  constructor(private  employeeService: EmployeeService,private formBuild: FormBuilder, private router: Router,private store: Store<any>,private action$ :Actions) {
+
+  constructor(private  employeeService: EmployeeService, private formBuild: FormBuilder, private router: Router, private store: Store<any>, private action$: Actions) {
   }
 
   ngOnInit() {
@@ -41,13 +44,13 @@ export class EmployeeListComponent implements OnInit {
     console.log('getdata')
 
     this.store.dispatch(new fromState.LoadEmployee());
-    this.store.select(SelectEmployeesState).subscribe(data =>
-    {
-     console.log(" ---- Data ",data);
-     if (data)
-      this.employees=Object.values(data)
-  })
-}
+    this.store.select(SelectEmployeesState).subscribe(data => {
+      console.log(" ---- Data ", data);
+      if (data)
+        this.employees = Object.values(data)
+    })
+  }
+
   Edit(employee: Employee) {
     localStorage.setItem("id", employee.id.toString());
     this.router.navigate(["edit"]);
@@ -66,28 +69,28 @@ export class EmployeeListComponent implements OnInit {
   //       },
   //       error => console.log(error));
   // }
-  Delete(idEmployee: number){
-    if(confirm("Are you sure You want Delete this employee ?")){
+  Delete(idEmployee: number) {
+    if (confirm("Are you sure You want Delete this employee ?")) {
 
 
-        this.store.dispatch(new fromState.deleteEmployee(idEmployee));
+      this.store.dispatch(new fromState.deleteEmployee(idEmployee));
 
       this.getdata();
-      // this.router.navigate(["list"]);
-  }}
-  searchEmployee() {
-    if (this.searchemp) {
-      this.employeeService.searchEmployee(this.searchemp)
-        .subscribe((data: any) => {
-            this.employees = data;
-          });
-    } else {
-      this.getdata();
+
     }
   }
 
-  // edit() {
-  //
-  //   this.display = true;
-  // }
+  searchEmployee() {
+    if (this._timeOutID)
+      clearTimeout(this._timeOutID);
+
+    this._timeOutID = setTimeout(() => {
+      if (this.searchemp) {
+        this.store.dispatch(new fromState.GetEmployeesAction({req: this.searchemp}));
+      } else {
+        this.getdata();
+      }
+    }, 1000);
+  }
+
 }
